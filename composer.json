@@ -11,8 +11,8 @@
         "gtmetrix"
     ],
     "support": {
-        "docs": "https://github.com/lukeyouell/gtmetrix/blob/master/README.md",
-        "issues": "https://github.com/lukeyouell/gtmetrix/issues"
+        "docs": "https://github.com/lukeyouell/craft3-gtmetrix/blob/master/README.md",
+        "issues": "https://github.com/lukeyouell/craft3-gtmetrix/issues"
     },
     "license": "MIT",
     "authors": [
