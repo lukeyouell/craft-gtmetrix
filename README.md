@@ -59,7 +59,7 @@ Testing has been initiated.
 
 ##### 4. Error
 
-There was a problem with the test, an description of the error will be provided.
+There was a problem with the test, a description of the error will be provided.
 
 ##### 5. Completed
 
