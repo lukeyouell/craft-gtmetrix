@@ -1,0 +1,304 @@
+{#
+/**
+ * GTmetrix plugin for Craft CMS 3.x
+ *
+ * GTmetrix report.twig
+ *
+ * @author    Luke Youell
+ * @copyright Copyright (c) 2017 Luke Youell
+ * @link      https://github.com/lukeyouell
+ * @package   GTmetrix
+ * @since     1.0.0
+ */
+#}
+
+{% extends "gtmetrix/_layout" %}
+
+{% set testId = craft.app.request.getParam('id') %}
+
+{% set test = craft.GTmetrix.getTestById(testId) %}
+
+{% set test = (test|length) and (test.state not in ['completed', 'error']) ? craft.GTmetrix.updateTest(test.testId) : test %}
+
+{% set selectedNavItem = 'tests' %}
+
+{% set extraPageHeaderHtml %}
+
+  <div class="buttons">
+
+    {% if (test|length) and (test.state not in ['completed', 'error']) %}
+
+      <span class="btn" onClick="window.location.reload()">{{ 'Refresh'|t }}</span>
+
+    {% endif %}
+
+    <a href="{{ url('gtmetrix/new') }}" class="btn submit add icon">{{ 'New test'|t }}</a>
+
+  </div>
+
+{% endset %}
+
+{% set content %}
+
+  {% if test|length %}
+
+    {% set response = craft.GTmetrix.decodeReport(test.response) %}
+    {% set report = response.results %}
+
+    <div class="grid-x grid-margin-x">
+
+      <div class="cell">
+
+        <h3>{{ 'Test State'|t }}</h3>
+
+        <div class="callout {{ test.state == 'queued' ? 'warning' : test.state == 'started' ? 'primary' : test.state == 'completed' ? 'success' : test.state == 'error' ? 'alert' : 'secondary' }}">
+
+          <p>{{ test.state == 'error' ? test.state|title ~ ': ' ~ response.error : test.state|title }}</p>
+
+        </div>
+
+      </div>
+
+      <div class="cell">
+
+        <h3>{{ 'Test Details'|t }}</h3>
+
+        <div class="callout secondary">
+
+          <div class="grid-x grid-margin-x">
+
+            <div class="medium-3 cell">
+
+              <p><strong>{{ 'ID' }}</strong></p>
+
+            </div>
+
+            <div class="medium-9 cell">
+
+              <p>{{ test.testId }}</p>
+
+            </div>
+
+            <div class="medium-3 cell">
+
+              <p><strong>{{ 'Date'|t }}</strong></p>
+
+            </div>
+
+            <div class="medium-9 cell">
+
+              <p>{{ test.dateCreated|date('jS F Y H:i') }}</p>
+
+            </div>
+
+            <div class="medium-3 cell">
+
+              <p><strong>{{ 'Entry'|t }}</strong></p>
+
+            </div>
+
+            <div class="medium-9 cell">
+
+              <p>{{ test.entryTitle ~ ' (#' ~ test.entryId ~')' }}</p>
+
+            </div>
+
+            <div class="medium-3 cell">
+
+              <p><strong>{{ 'URL' }}</strong></p>
+
+            </div>
+
+            <div class="medium-9 cell">
+
+              <p><a href="{{ test.entryUrl }}" target="_blank">{{ test.entryUrl }}</a></p>
+
+            </div>
+
+            {% set locations = {
+              1: 'Vancouver, Canada',
+              2: 'London, UK',
+              3: 'Sydney, Australia',
+              4: 'Dallas, USA',
+              5: 'Mumbai, India',
+              6: 'São Paulo, Brazil',
+              7: 'Hong Kong, China'
+            } %}
+
+            <div class="medium-3 cell">
+
+              <p><strong>{{ 'Location'|t }}</strong></p>
+
+            </div>
+
+            <div class="medium-9 cell">
+
+              <p>{{ locations[test.location] is defined ? locations[test.location] : 'Unknown'|t }}</p>
+
+            </div>
+
+            {% set browsers = {
+              1: 'Firefox',
+              3: 'Chrome'
+            } %}
+
+            <div class="medium-3 cell">
+
+              <p><strong>{{ 'Browser'|t }}</strong></p>
+
+            </div>
+
+            <div class="medium-9 cell">
+
+              <p>{{ browsers[test.browser] is defined ? browsers[test.browser] : 'Unknown'|t }}</p>
+
+            </div>
+
+            {% set connections = {
+              '': 'Unthrottled',
+              '5000/1000/30': 'Cable (5/1 Mbps, 30ms)',
+              '1500/1384/50': 'DSL (1.5 Mbps/384 Kbps, 50ms)',
+              '1600/768/200': '3G Mobile (1.6 Mbps/768 Kbps, 200ms)',
+              '240/200/400': '2G Mobile (240/200 Kbps, 400ms)',
+              '50/30/125': '56K Dial-up (50/30 Kbps, 125ms)'
+            } %}
+
+            <div class="medium-3 cell">
+
+              <p><strong>{{ 'Connection'|t }}</strong></p>
+
+            </div>
+
+            <div class="medium-9 cell">
+
+              <p>{{ connections[test.connection] is defined ? connections[test.connection] : 'Unknown'|t }}</p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      {% if report|length %}
+
+        <div class="cell">
+
+          <h3>{{ 'Performance Scores'|t }}</h3>
+
+          <div class="grid-x grid-margin-x">
+
+            <div class="medium-6 cell">
+
+              <div class="callout secondary">
+
+                <h4>{{ 'PageSpeed Score'|t }}</h4>
+
+                <p>{{ report.pagespeed_score is defined ? report.pagespeed_score ~ '%' : 'Pending'|t }}</p>
+
+              </div>
+
+            </div>
+
+            <div class="medium-6 cell">
+
+              <div class="callout secondary">
+
+                <h4>{{ 'YSlow Score'|t }}</h4>
+
+                <p>{{ report.yslow_score is defined ? report.yslow_score ~ '%' : 'Pending'|t }}</p>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="cell">
+
+          <h3>{{ 'Page Details'|t }}</h3>
+
+          <div class="grid-x grid-margin-x">
+
+            <div class="medium-4 cell">
+
+              <div class="callout secondary">
+
+                <h4>{{ 'Fully Loaded Time'|t }}</h4>
+
+                <p>{{ report.fully_loaded_time is defined ? (report.fully_loaded_time / 1000)|number_format(2, '.', ',') ~ 's' : 'Pending'|t }}</p>
+
+              </div>
+
+            </div>
+
+            <div class="medium-4 cell">
+
+              <div class="callout secondary">
+
+                <h4>{{ 'Total Page Size'|t }}</h4>
+
+                <p>{{ report.page_bytes is defined ? (report.page_bytes / 1000)|number_format(2, '.', ',') ~ 'KB' : 'Pending'|t }}</p>
+
+              </div>
+
+            </div>
+
+            <div class="medium-4 cell">
+
+              <div class="callout secondary">
+
+                <h4>{{ 'Requests'|t }}</h4>
+
+                <p>{{ report.page_elements is defined ? report.page_elements : 'Pending'|t }}</p>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="cell">
+
+          {% include 'gtmetrix/_includes/reportTabs' %}
+
+        </div>
+
+      {% endif %}
+
+    </div>
+
+  {% else %}
+
+    <div class="callout alert">
+
+      {{ 'Test not found.'|t }}
+
+    </div>
+
+  {% endif %}
+
+  {% set reportJs %}
+
+    $('.data').each(function() {
+
+      $(this).find('tbody').sort(sortRows).appendTo($(this));
+
+    });
+
+    function sortRows(a, b){
+
+      return ($(b).data('score')) < ($(a).data('score')) ? 1 : -1;
+
+    }
+
+  {% endset %}
+
+  {% js reportJs %}
+
+{% endset %}

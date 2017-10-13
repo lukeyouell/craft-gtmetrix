@@ -1,0 +1,50 @@
+{
+    "name": "lukeyouell/craft3-gtmetrix",
+    "description": "GTmetrix gives you insight on how well your entries load and provides actionable recommendations on how to optimise them.",
+    "type": "craft-plugin",
+    "version": "1.0.0",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "gtmetrix"
+    ],
+    "support": {
+        "docs": "https://github.com/lukeyouell/gtmetrix/blob/master/README.md",
+        "issues": "https://github.com/lukeyouell/gtmetrix/issues"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Luke Youell",
+            "homepage": "https://github.com/lukeyouell"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "~3.0.0-beta.23"
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+          "lukeyouell\\gtmetrix\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "GTmetrix",
+        "handle": "gtmetrix",
+        "schemaVersion": "1.0.0",
+        "hasCpSettings": false,
+        "hasCpSection": true,
+        "changelogUrl": "https://raw.githubusercontent.com/lukeyouell/craft3-gtmetrix/master/CHANGELOG.md",
+        "components": {
+            "gTmetrixService": "lukeyouell\\gtmetrix\\services\\GTmetrixService"
+        },
+        "class": "lukeyouell\\gtmetrix\\GTmetrix"
+    }
+}

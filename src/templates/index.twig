@@ -1,0 +1,87 @@
+{#
+/**
+ * GTmetrix plugin for Craft CMS 3.x
+ *
+ * GTmetrix index.twig
+ *
+ * @author    Luke Youell
+ * @copyright Copyright (c) 2017 Luke Youell
+ * @link      https://github.com/lukeyouell
+ * @package   GTmetrix
+ * @since     1.0.0
+ */
+#}
+
+{% extends "gtmetrix/_layout" %}
+
+{% set selectedNavItem = 'tests' %}
+
+{% set extraPageHeaderHtml %}
+
+  <div class="buttons">
+
+    <span class="btn" onClick="window.location.reload()">{{ 'Refresh'|t }}</span>
+
+    <a href="{{ url('gtmetrix/new') }}" class="btn submit add icon">{{ 'New test'|t }}</a>
+
+  </div>
+
+{% endset %}
+
+{% set tests = craft.GTmetrix.getAllTestRecords() %}
+
+{% set content %}
+
+  {% if tests|length %}
+
+    <table class="data fullwidth collapsible">
+
+      <thead>
+
+        <th>{{ 'Title'|t }}</th>
+        <th>{{ 'Date'|t }}</th>
+        <th>{{ 'State'|t }}</th>
+        <th>{{ 'PageSpeed'|t }}</th>
+        <th>{{ 'YSlow'|t }}</th>
+        <td class="thin"></td>
+
+      </thead>
+
+      <tbody>
+
+        {% for test in tests %}
+
+          {% set record = test.state not in ['completed', 'error'] ? craft.GTmetrix.updateTest(test.testId) %}
+          {% set report = craft.GTmetrix.decodeReport(test.response) %}
+
+          <tr>
+
+            <th><a href="{{ url('gtmetrix/report?id=' ~ test.testId) }}">{{ test.entryTitle ? test.entryTitle : 'Undefined'|t }}</a></th>
+            <td>{{ test.dateCreated|date('d/m/Y H:i') }}</td>
+            <td>
+              <span class="status {{ test.state == 'queued' ? 'orange' : test.state == 'started' ? 'blue' : test.state == 'completed' ? 'green' : test.state == 'error' ? 'red' : 'grey' }}"></span>
+              {{ test.state ? test.state|title : 'Requested'|t }}
+            </td>
+            <td>{{ report.results.pagespeed_score is defined ? report.results.pagespeed_score ~ '%' : '...' }}</td>
+            <td>{{ report.results.yslow_score is defined ? report.results.yslow_score ~ '%' : '...' }}</td>
+            <td><a href="{{ url('gtmetrix/report?id=' ~ test.testId) }}" data-icon="expand"></a></td>
+
+          </tr>
+
+        {% endfor %}
+
+      </tbody>
+
+    </table>
+
+  {% else %}
+
+    <h3>{{ 'No Tests Found'|t }}</h3>
+
+    <p>{{ 'It looks like you haven\'t tested any of your entries yet, click the button below to get started.'|t }}</p>
+
+    <p><a href="{{ url('gtmetrix/new') }}" class="btn submit add icon">{{ 'New test'|t }}</a></p>
+
+  {% endif %}
+
+{% endset %}

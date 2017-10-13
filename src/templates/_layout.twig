@@ -1,0 +1,34 @@
+{#
+/**
+ * GTmetrix plugin for Craft CMS 3.x
+ *
+ * GTmetrix _layout.twig
+ *
+ * @author    Luke Youell
+ * @copyright Copyright (c) 2017 Luke Youell
+ * @link      https://github.com/lukeyouell
+ * @package   GTmetrix
+ * @since     1.0.0
+ */
+#}
+
+{% requireAdmin %}
+
+{% extends "_layouts/cp" %}
+
+{% do view.registerAssetBundle("lukeyouell\\gtmetrix\\assetbundles\\gtmetrix\\GTmetrixAsset") %}
+
+{% set docsUrl = "https://github.com/lukeyouell/craft3-gtmetrix/blob/master/README.md" %}
+
+{% set title = 'GTmetrix' %}
+
+{% set navItems = {
+	tests: { label: 'Tests'|t, url: url('gtmetrix') },
+  settings: { label: 'Settings'|t, url: url('gtmetrix/settings') }
+} %}
+
+{% block sidebar %}
+	<nav>
+		{% include "_includes/nav" with { items: navItems, selectedItem: selectedNavItem } only %}
+	</nav>
+{% endblock %}
