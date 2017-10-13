@@ -41,6 +41,7 @@
         "schemaVersion": "1.0.0",
         "hasCpSettings": false,
         "hasCpSection": true,
+        "documentationUrl": "https://github.com/lukeyouell/craft3-gtmetrix/blob/master/README.md",
         "changelogUrl": "https://raw.githubusercontent.com/lukeyouell/craft3-gtmetrix/master/CHANGELOG.md",
         "components": {
             "gTmetrixService": "lukeyouell\\gtmetrix\\services\\GTmetrixService"
