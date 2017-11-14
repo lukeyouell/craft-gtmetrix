@@ -73,6 +73,5 @@ Some things to do, and ideas for potential features:
 - Restrict abilities if API credentials are missing
 - Delete records
 - Make test resources available
-- Abide form validation
 
 Brought to you by [Luke Youell](https://github.com/lukeyouell)
