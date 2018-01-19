@@ -1,8 +1,22 @@
 /* Custom CSS start */
 
-.pane .pane {
-  background: #fff;
-  box-shadow: 0 0 0 1px #e3e5e8; }
+.report-tabs-nav {
+  background: #fafafa;
+  border: 1px solid #e3e5e8;
+  border-radius: 4px 4px 0 0;
+  box-shadow: none !important;
+}
+
+.report-tabs-nav .tab::after {
+  display: none !important;
+}
+
+.report-tab-pane {
+  padding: 1rem;
+  border: 1px solid #e3e5e8;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+}
 
 /* Custom CSS end */
 

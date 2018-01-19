@@ -15,28 +15,18 @@
 {% extends "gtmetrix/_layout" %}
 
 {% set testId = craft.app.request.getParam('id') %}
-
 {% set test = craft.GTmetrix.getTestById(testId) %}
-
 {% set test = (test|length) and (test.state not in ['completed', 'error']) ? craft.GTmetrix.updateTest(test.testId) : test %}
-
 {% set selectedNavItem = 'tests' %}
+{% set title = 'Test ' ~ testId %}
 
-{% set extraPageHeaderHtml %}
+{% block actionButton %}
 
-  <div class="buttons">
+  {{ (test|length) and (test.state not in ['completed', 'error']) ? ('<span class="btn" onClick="window.location.reload()">Refresh</span>')|raw }}
 
-    {% if (test|length) and (test.state not in ['completed', 'error']) %}
+  <a href="{{ url('gtmetrix/new') }}" class="btn submit add icon">{{ 'New test'|t }}</a>
 
-      <span class="btn" onClick="window.location.reload()">{{ 'Refresh'|t }}</span>
-
-    {% endif %}
-
-    <a href="{{ url('gtmetrix/new') }}" class="btn submit add icon">{{ 'New test'|t }}</a>
-
-  </div>
-
-{% endset %}
+{% endblock %}
 
 {% set content %}
 

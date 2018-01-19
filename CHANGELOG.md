@@ -2,7 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
+## 1.1.0 - 2018-01-19
+
+### Changed
+- Plugin requirement changed to `^3.0.0-RC1`
+- New icons
+
+### Fixed
+- Templates now compatible with CP changes
 
 ## 1.0.2 - 2017-12-15
 ### Added

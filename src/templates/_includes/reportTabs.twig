@@ -12,202 +12,189 @@
  */
 #}
 
-<div class="pane">
+<nav id="tabs" class="report-tabs-nav">
+  <ul>
+    <li><a id="tab-pagespeed" class="tab sel" href="#tabPageSpeed" title="{{ 'PageSpeed'|t }}">{{ 'PageSpeed'|t }}</a></li>
+    <li><a id="tab-yslow" class="tab" href="#tabYSlow" title="{{ 'YSlow'|t }}">{{ 'YSlow'|t }}</a></li>
+  </ul>
+</nav>
 
-  <nav id="tabs" class="tabs">
+<div>
 
-    <ul>
+  <div id="tabPageSpeed" class="report-tab-pane">
 
-      <li>
-        <a id="tab-0" class="tab sel" href="#tabPageSpeed" tabindex="0">{{ 'PageSpeed'|t }}</a>
-      </li>
+    {% if (response.pagespeed|length) %}
 
-      <li>
-        <a id="tab-1" class="tab" href="#tabYSlow" tabindex="1">{{ 'YSlow'|t }}</a>
-      </li>
+      <table class="data fullwidth" style="table-layout:fixed">
 
-    </ul>
+        <thead>
 
-  </nav>
+          <th>{{ 'Recommendation'|t }}</th>
+          <th style="width:50%">{{ 'Score'|t }}</th>
 
-  <div>
+        </thead>
 
-    <div id="tabPageSpeed">
+        {% for rule in response.pagespeed.rules %}
 
-      {% if (response.pagespeed|length) %}
+          <tbody data-score="{{ rule.score }}">
 
-        <table class="data fullwidth" style="table-layout:fixed">
+            <tr>
 
-          <thead>
+              <td>
 
-            <th>{{ 'Recommendation'|t }}</th>
-            <th style="width:50%">{{ 'Score'|t }}</th>
+                {{ rule.name|t }}
 
-          </thead>
+              </td>
+              <td>
 
-          {% for rule in response.pagespeed.rules %}
+                <div class="progress {{ rule.score >= 90 ? 'success' : (rule.score < 90) and (rule.score >= 50) ? 'warning' : rule.score < 50 ? 'alert' : 'primary' }}" role="progressbar" tabindex="0" aria-valuenow="{{ rule.score }}" aria-valuemin="0" aria-valuetext="{{ rule.score }}%" aria-valuemax="100">
+                  <span class="progress-meter" style="width: {{ rule.score }}%">
+                    <p class="progress-meter-text">{{ rule.score }}%</p>
+                  </span>
+                </div>
 
-            <tbody data-score="{{ rule.score }}">
+              </td>
+
+            </tr>
+
+            {% if rule.warnings|length %}
 
               <tr>
 
-                <td>
+                <td colspan="2">
 
-                  {{ rule.name|t }}
+                  <div class="callout warning">
 
-                </td>
-                <td>
+                    {{ rule.warnings|t|replace({'<li>': '<br>'})|striptags('<p><br>')|raw }}
 
-                  <div class="progress {{ rule.score >= 90 ? 'success' : (rule.score < 90) and (rule.score >= 50) ? 'warning' : rule.score < 50 ? 'alert' : 'primary' }}" role="progressbar" tabindex="0" aria-valuenow="{{ rule.score }}" aria-valuemin="0" aria-valuetext="{{ rule.score }}%" aria-valuemax="100">
-                    <span class="progress-meter" style="width: {{ rule.score }}%">
-                      <p class="progress-meter-text">{{ rule.score }}%</p>
-                    </span>
                   </div>
 
                 </td>
 
               </tr>
 
-              {% if rule.warnings|length %}
+            {% endif %}
 
-                <tr>
+          </tbody>
 
-                  <td colspan="2">
+        {% endfor %}
 
-                    <div class="callout warning">
+      </table>
 
-                      {{ rule.warnings|t|replace({'<li>': '<br>'})|striptags('<p><br>')|raw }}
+    {% else %}
 
-                    </div>
+      <div class="callout alert">
 
-                  </td>
+        {{ 'PageSpeed report not found.'|t }}
 
-                </tr>
+      </div>
 
-              {% endif %}
+    {% endif %}
 
-            </tbody>
+  </div>
 
-          {% endfor %}
+  <div id="tabYSlow" class="report-tab-pane hidden">
 
-        </table>
+    {% if (response.yslow|length) %}
 
-      {% else %}
+      <table class="data fullwidth collapsible">
 
-        <div class="callout alert">
+        <thead>
 
-          {{ 'PageSpeed report not found.'|t }}
+          <th>{{ 'Recommendation'|t }}</th>
+          <th style="width:50%">{{ 'Score'|t }}</th>
 
-        </div>
+        </thead>
 
-      {% endif %}
+        {% set ySlowNames = {
+          'ynumreq': 'Make fewer HTTP Requests',
+          'ycdn': 'Use a Content Delivery Network (CDN)',
+          'yemptysrc': 'Avoid empty src or href',
+          'yexpires': 'Add Expires headers',
+          'ycompress': 'Compress components with gzip',
+          'ycsstop': 'Put CSS at top',
+          'yjsbottom': 'Put JavaScript at bottom',
+          'yexpressions': 'Avoid CSS expressions',
+          'yexternal': 'Make JavaScript and CSS external',
+          'ydns': 'Reduce DNS lookups',
+          'yminify': 'Minify JavaScript and CSS',
+          'yredirects': 'Avoid URL redirects',
+          'ydupes': 'Remove duplicate JavasScript and CSS',
+          'yetags': 'Configure entity tags (ETags)',
+          'yxhr': 'Make AJAX cacheable',
+          'yxhrmethod': 'Use GET for AJAX requests',
+          'ymindom': 'Reduce the number of DOM elements',
+          'yno404': 'Avoid HTTP 404 (Not Found) error',
+          'ymincookie': 'Reduce cookie size',
+          'ycookiefree': 'Use cookie-free domains',
+          'ynofilter': 'Avoid AlphaImageLoader filter',
+          'yimgnoscale': 'Do not scale images in HTML',
+          'yfavicon': 'Make favicon small and cacheable'
+        } %}
 
-    </div>
+        {% for key, rule in response.yslow.g if rule.score is defined %}
 
-    <div id="tabYSlow" class="hidden">
+          <tbody data-score="{{ rule.score }}">
 
-      {% if (response.yslow|length) %}
+            <tr>
 
-        <table class="data fullwidth collapsible">
+              <td>
 
-          <thead>
+                {{ ySlowNames[key] is defined ? ySlowNames[key] : 'Unknown'|t }}
 
-            <th>{{ 'Recommendation'|t }}</th>
-            <th style="width:50%">{{ 'Score'|t }}</th>
+              </td>
 
-          </thead>
+              <td>
 
-          {% set ySlowNames = {
-            'ynumreq': 'Make fewer HTTP Requests',
-            'ycdn': 'Use a Content Delivery Network (CDN)',
-            'yemptysrc': 'Avoid empty src or href',
-            'yexpires': 'Add Expires headers',
-            'ycompress': 'Compress components with gzip',
-            'ycsstop': 'Put CSS at top',
-            'yjsbottom': 'Put JavaScript at bottom',
-            'yexpressions': 'Avoid CSS expressions',
-            'yexternal': 'Make JavaScript and CSS external',
-            'ydns': 'Reduce DNS lookups',
-            'yminify': 'Minify JavaScript and CSS',
-            'yredirects': 'Avoid URL redirects',
-            'ydupes': 'Remove duplicate JavasScript and CSS',
-            'yetags': 'Configure entity tags (ETags)',
-            'yxhr': 'Make AJAX cacheable',
-            'yxhrmethod': 'Use GET for AJAX requests',
-            'ymindom': 'Reduce the number of DOM elements',
-            'yno404': 'Avoid HTTP 404 (Not Found) error',
-            'ymincookie': 'Reduce cookie size',
-            'ycookiefree': 'Use cookie-free domains',
-            'ynofilter': 'Avoid AlphaImageLoader filter',
-            'yimgnoscale': 'Do not scale images in HTML',
-            'yfavicon': 'Make favicon small and cacheable'
-          } %}
+                <div class="progress {{ rule.score >= 90 ? 'success' : (rule.score < 90) and (rule.score >= 50) ? 'warning' : rule.score < 50 ? 'alert' : 'primary' }}" role="progressbar" tabindex="0" aria-valuenow="{{ rule.score }}" aria-valuemin="0" aria-valuetext="{{ rule.score }}%" aria-valuemax="100">
+                  <span class="progress-meter" style="width: {{ rule.score }}%">
+                    <p class="progress-meter-text">{{ rule.score }}%</p>
+                  </span>
+                </div>
 
-          {% for key, rule in response.yslow.g if rule.score is defined %}
+              </td>
 
-            <tbody data-score="{{ rule.score }}">
+            </tr>
+
+            {% if rule.message|length %}
 
               <tr>
 
-                <td>
+                <td colspan="2">
 
-                  {{ ySlowNames[key] is defined ? ySlowNames[key] : 'Unknown'|t }}
+                  <div class="callout warning">
 
-                </td>
+                    {{ rule.message|t|striptags('<p>')|raw }}
 
-                <td>
+                      {% for component in rule.components %}
 
-                  <div class="progress {{ rule.score >= 90 ? 'success' : (rule.score < 90) and (rule.score >= 50) ? 'warning' : rule.score < 50 ? 'alert' : 'primary' }}" role="progressbar" tabindex="0" aria-valuenow="{{ rule.score }}" aria-valuemin="0" aria-valuetext="{{ rule.score }}%" aria-valuemax="100">
-                    <span class="progress-meter" style="width: {{ rule.score }}%">
-                      <p class="progress-meter-text">{{ rule.score }}%</p>
-                    </span>
+                        <p>{{ component|t }}</p>
+
+                      {% endfor %}
+
                   </div>
 
                 </td>
 
               </tr>
 
-              {% if rule.message|length %}
+            {% endif %}
 
-                <tr>
+          </tbody>
 
-                  <td colspan="2">
+        {% endfor %}
 
-                    <div class="callout warning">
+      </table>
 
-                      {{ rule.message|t|striptags('<p>')|raw }}
+    {% else %}
 
-                        {% for component in rule.components %}
+      <div class="callout alert">
 
-                          <p>{{ component|t }}</p>
+        {{ 'YSlow report not found.'|t }}
 
-                        {% endfor %}
+      </div>
 
-                    </div>
-
-                  </td>
-
-                </tr>
-
-              {% endif %}
-
-            </tbody>
-
-          {% endfor %}
-
-        </table>
-
-      {% else %}
-
-        <div class="callout alert">
-
-          {{ 'YSlow report not found.'|t }}
-
-        </div>
-
-      {% endif %}
-
-    </div>
+    {% endif %}
 
   </div>
 

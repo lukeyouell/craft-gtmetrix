@@ -14,14 +14,12 @@
 
 {% extends "gtmetrix/_layout" %}
 
-{% set plugin = craft.app.plugins.getPlugin('gtmetrix') %}
-
-{% set settings = plugin.settings %}
-
-{% set selectedNavItem = 'settings' %}
-
 {% import "_includes/forms" as forms %}
 
+{% set title = 'Settings' %}
+{% set plugin = craft.app.plugins.getPlugin('gtmetrix') %}
+{% set settings = plugin.settings %}
+{% set selectedNavItem = 'settings' %}
 {% set fullPageForm = true %}
 
 {% set content %}
@@ -92,66 +90,42 @@
 
     <div class="cell">
 
-      <div class="pane last">
+      {{ forms.hidden({
+          name: 'action',
+          value: 'plugins/save-plugin-settings'
+        })
+      }}
 
-        <nav id="tabs" class="tabs">
+      {{ forms.hidden({
+          name: 'pluginHandle',
+          value: 'gtmetrix'
+        })
+      }}
 
-          <ul>
+      {{ redirectInput('gtmetrix/settings') }}
 
-            <li>
-              <a id="tab-0" class="tab sel" href="#tabAuthentication" tabindex="0">{{ 'Authentication'|t }}</a>
-            </li>
+      {{ forms.textField({
+          first: true,
+          label: 'Email Address'|t,
+          instructions: 'The email address associated with your GTmetrix account.'|t,
+          id: 'settings-userEmail',
+          name: 'settings[userEmail]',
+          placeholder: 'Email address',
+          value: settings.userEmail,
+          required: true
+        })
+      }}
 
-          </ul>
-
-        </nav>
-
-        <div>
-
-          <div id="tabAuthentication">
-
-            {{ forms.hidden({
-                name: 'action',
-                value: 'plugins/save-plugin-settings'
-              })
-            }}
-
-            {{ forms.hidden({
-                name: 'pluginHandle',
-                value: 'gtmetrix'
-              })
-            }}
-
-            {{ redirectInput('gtmetrix/settings') }}
-
-            {{ forms.textField({
-                first: true,
-                label: 'Email Address'|t,
-                instructions: 'The email address associated with your GTmetrix account.'|t,
-                id: 'settings-userEmail',
-                name: 'settings[userEmail]',
-                placeholder: 'Email address',
-                value: settings.userEmail,
-                required: true
-              })
-            }}
-
-            {{ forms.textField({
-                label: 'API Key'|t,
-                instructions: 'The API key used to authenticate requests made to GTmetrix.'|t,
-                id: 'settings-apiKey',
-                name: 'settings[apiKey]',
-                placeholder: 'c5CBbj7AtFQwdIuBb5Aqsm3yMqcS7fyH',
-                value: settings.apiKey,
-                required: true,
-              })
-            }}
-
-          </div>
-
-        </div>
-
-      </div>
+      {{ forms.textField({
+          label: 'API Key'|t,
+          instructions: 'The API key used to authenticate requests made to GTmetrix.'|t,
+          id: 'settings-apiKey',
+          name: 'settings[apiKey]',
+          placeholder: 'c5CBbj7AtFQwdIuBb5Aqsm3yMqcS7fyH',
+          value: settings.apiKey,
+          required: true,
+        })
+      }}
 
     </div>
 

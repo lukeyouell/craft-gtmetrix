@@ -14,25 +14,25 @@
 
 {% extends "gtmetrix/_layout" %}
 
-{% set plugin = craft.app.plugins.getPlugin('gtmetrix') %}
-
-{% set settings = plugin.settings %}
-
-{% set selectedNavItem = 'tests' %}
-
 {% import "_includes/forms" as forms %}
 
+{% set title = 'New Test' %}
+{% set plugin = craft.app.plugins.getPlugin('gtmetrix') %}
+{% set settings = plugin.settings %}
+{% set selectedNavItem = 'tests' %}
 {% set fullPageForm = true %}
 
-{% set extraPageHeaderHtml %}
+{% block actionButton %}
 
-  <div class="buttons">
+  <input type="submit" class="btn submit" value="{{ 'Start test'|t }}">
 
-    <input type="submit" class="btn submit" value="{{ 'Start test'|t }}">
+{% endblock %}
 
-  </div>
-
-{% endset %}
+{% set tabs = {
+  format: { url: '#tabFormat', label: 'Format' },
+  authentication: { url: '#tabAuthentication', label: 'Authentication' },
+  advanced: { url: '#tabAdvanced', label: 'Advanced' }
+} %}
 
 {% set content %}
 
@@ -54,167 +54,135 @@
     })
   }}
 
-  <div class="grid-x grid-margin-x">
+  <div>
 
-    <div class="cell">
+    <div id="tabFormat">
 
-      <div class="pane">
+      {{ forms.elementSelectField({
+          first: true,
+          label: 'Entry'|t,
+          instructions: 'The entry you wish to test.'|t,
+          id: 'entries',
+          name: 'entries',
+          elementType: craft.GTmetrix.entryElementType,
+          sources: '*',
+          limit: 1,
+          selectionLabel: 'Entry',
+          required: true
+        })
+      }}
 
-        <nav id="tabs" class="tabs">
+      {{ forms.selectField({
+          label: 'Location'|t,
+          instructions: 'Use this to see how latency affects your page load times from different parts of the world.'|t,
+          id: 'location',
+          name: 'location',
+          options: {
+            2: 'London, UK',
+            4: 'Dallas, USA',
+            1: 'Vancouver, Canada',
+            3: 'Sydney, Australia',
+            5: 'Mumbai, India',
+            6: 'São Paulo, Brazil',
+            7: 'Hong Kong, China'
+          },
+          required: true
+        })
+      }}
 
-          <ul>
+      {{ forms.selectField({
+          label: 'Browser'|t,
+          instructions: 'Select a browser to analyse the given page.'|t,
+          id: 'browser',
+          name: 'browser',
+          options: {
+            3: 'Chrome',
+            1: 'Firefox'
+          },
+          required: true
+        })
+      }}
 
-            <li>
-              <a id="tab-0" class="tab sel" href="#tabFormat" tabindex="0">{{ 'Format'|t }}</a>
-            </li>
+      {{ forms.selectField({
+          label: 'Connection'|t,
+          instructions: 'Simulate various connection types to see how they affect your page loads.'|t,
+          id: 'x-metrix-throttle',
+          name: 'x-metrix-throttle',
+          options: {
+            '': 'Unthrottled',
+            '5000/1000/30': 'Cable (5/1 Mbps, 30ms)',
+            '1500/1384/50': 'DSL (1.5 Mbps/384 Kbps, 50ms)',
+            '1600/768/200': '3G Mobile (1.6 Mbps/768 Kbps, 200ms)',
+            '240/200/400': '2G Mobile (240/200 Kbps, 400ms)',
+            '50/30/125': '56K Dial-up (50/30 Kbps, 125ms)'
+          },
+          required: true
+        })
+      }}
 
-            <li>
-              <a id="tab-1" class="tab" href="#tabAuthentication" tabindex="1">{{ 'Authentication'|t }}</a>
-            </li>
+    </div>
 
-            <li>
-              <a id="tab-2" class="tab" href="#tabAdvanced" tabindex="2">{{ 'Advanced'|t }}</a>
-            </li>
+    <div id="tabAuthentication" class="hidden">
 
-          </ul>
+      {{ forms.textField({
+          label: 'HTTP Username'|t,
+          instructions: 'The HTTP authentication username, should it be required.'|t,
+          id: 'login-user',
+          name: 'login-user',
+          placeholder: 'Username'|t
+        })
+      }}
 
-        </nav>
+      {{ forms.textField({
+          label: 'HTTP Password'|t,
+          instructions: 'The HTTP authentication password, should it be required.'|t,
+          id: 'login-ass',
+          name: 'login-pass',
+          placeholder: 'Password'|t
+        })
+      }}
 
-        <div>
+      {{ forms.textareaField({
+          label: 'Cookies'|t,
+          instructions: 'A list of cookies to send with the request. Use this option to analyse pages that require the user to be logged in.'|t,
+          id: 'x-metrix-cookies',
+          class: 'x-metrix-cookies',
+          placeholder: 'host=example.com session=QadlvUk3h',
+          rows: 5
+        })
+      }}
 
-          <div id="tabFormat">
+    </div>
 
-            {{ forms.elementSelectField({
-                first: true,
-                label: 'Entry'|t,
-                instructions: 'The entry you wish to test.'|t,
-                id: 'entries',
-                name: 'entries',
-                elementType: craft.GTmetrix.entryElementType,
-                sources: '*',
-                limit: 1,
-                selectionLabel: 'Entry',
-                required: true
-              })
-            }}
+    <div id="tabAdvanced" class="hidden">
 
-            {{ forms.selectField({
-                label: 'Location'|t,
-                instructions: 'Use this to see how latency affects your page load times from different parts of the world.'|t,
-                id: 'location',
-                name: 'location',
-                options: {
-                  2: 'London, UK',
-                  4: 'Dallas, USA',
-                  1: 'Vancouver, Canada',
-                  3: 'Sydney, Australia',
-                  5: 'Mumbai, India',
-                  6: 'São Paulo, Brazil',
-                  7: 'Hong Kong, China'
-                },
-                required: true
-              })
-            }}
+      {{ forms.lightswitchField({
+          label: 'AdBlock'|t,
+          instructions: 'Prevent ads from loading using the Adblock Plus plugin. This can help you assess how ads affect the loading of your site.'|t,
+          id: 'x-metrix-adblock',
+          name: 'x-metrix-adblock'
+        })
+      }}
 
-            {{ forms.selectField({
-                label: 'Browser'|t,
-                instructions: 'Select a browser to analyse the given page.'|t,
-                id: 'browser',
-                name: 'browser',
-                options: {
-                  3: 'Chrome',
-                  1: 'Firefox'
-                },
-                required: true
-              })
-            }}
+      {{ forms.textareaField({
+          label: 'URL Whitelist'|t,
+          instructions: 'Only load resources that match one of the URLs on this list.'|t,
+          id: 'x-metrix-whitelist',
+          class: 'x-metrix-whitelist',
+          placeholder: 'Enter one full URL per line (http:// and https:// required). You can also use a \'*\' at the end of the URL to indicate that all resources which begin with that URL will be whitelisted.'|t,
+          rows: 5
+        })
+      }}
 
-            {{ forms.selectField({
-                label: 'Connection'|t,
-                instructions: 'Simulate various connection types to see how they affect your page loads.'|t,
-                id: 'x-metrix-throttle',
-                name: 'x-metrix-throttle',
-                options: {
-                  '': 'Unthrottled',
-                  '5000/1000/30': 'Cable (5/1 Mbps, 30ms)',
-                  '1500/1384/50': 'DSL (1.5 Mbps/384 Kbps, 50ms)',
-                  '1600/768/200': '3G Mobile (1.6 Mbps/768 Kbps, 200ms)',
-                  '240/200/400': '2G Mobile (240/200 Kbps, 400ms)',
-                  '50/30/125': '56K Dial-up (50/30 Kbps, 125ms)'
-                },
-                required: true
-              })
-            }}
-
-          </div>
-
-          <div id="tabAuthentication" class="hidden">
-
-            {{ forms.textField({
-                label: 'HTTP Username'|t,
-                instructions: 'The HTTP authentication username, should it be required.'|t,
-                id: 'login-user',
-                name: 'login-user',
-                placeholder: 'Username'|t
-              })
-            }}
-
-            {{ forms.textField({
-                label: 'HTTP Password'|t,
-                instructions: 'The HTTP authentication password, should it be required.'|t,
-                id: 'login-ass',
-                name: 'login-pass',
-                placeholder: 'Password'|t
-              })
-            }}
-
-            {{ forms.textareaField({
-            		label: 'Cookies'|t,
-                instructions: 'A list of cookies to send with the request. Use this option to analyse pages that require the user to be logged in.'|t,
-            		id: 'x-metrix-cookies',
-            		class: 'x-metrix-cookies',
-                placeholder: 'host=example.com session=QadlvUk3h',
-            		rows: 5
-            	})
-            }}
-
-          </div>
-
-          <div id="tabAdvanced" class="hidden">
-
-            {{ forms.lightswitchField({
-                label: 'AdBlock'|t,
-                instructions: 'Prevent ads from loading using the Adblock Plus plugin. This can help you assess how ads affect the loading of your site.'|t,
-                id: 'x-metrix-adblock',
-                name: 'x-metrix-adblock'
-              })
-            }}
-
-            {{ forms.textareaField({
-            		label: 'URL Whitelist'|t,
-                instructions: 'Only load resources that match one of the URLs on this list.'|t,
-            		id: 'x-metrix-whitelist',
-            		class: 'x-metrix-whitelist',
-                placeholder: 'Enter one full URL per line (http:// and https:// required). You can also use a \'*\' at the end of the URL to indicate that all resources which begin with that URL will be whitelisted.'|t,
-            		rows: 5
-            	})
-            }}
-
-            {{ forms.textareaField({
-            		label: 'URL Blacklist'|t,
-                instructions: 'Prevent loading of resources that match one of the URLs on this list. This occurs after the whitelist is applied.'|t,
-            		id: 'x-metrix-blacklist',
-            		class: 'x-metrix-blacklist',
-                placeholder: 'Enter one full URL per line (http:// and https:// required). You can also use a \'*\' at the end of the URL to indicate that all resources which begin with that URL will be blacklisted.'|t,
-            		rows: 5
-            	})
-            }}
-
-          </div>
-
-        </div>
-
-      </div>
+      {{ forms.textareaField({
+          label: 'URL Blacklist'|t,
+          instructions: 'Prevent loading of resources that match one of the URLs on this list. This occurs after the whitelist is applied.'|t,
+          id: 'x-metrix-blacklist',
+          class: 'x-metrix-blacklist',
+          placeholder: 'Enter one full URL per line (http:// and https:// required). You can also use a \'*\' at the end of the URL to indicate that all resources which begin with that URL will be blacklisted.'|t,
+          rows: 5
+        })
+      }}
 
     </div>
 

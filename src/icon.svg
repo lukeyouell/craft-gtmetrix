@@ -1,22 +1,20 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg id="GTmetrixIcon" data-name="GTmetrixIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 480 480">
-  <defs>
-    <style>
-      .gtmetrix-icon-cls-1 {
-        fill: url(#GTmetrixIcon-linear-gradient);
-      }
-
-      .gtmetrix-icon-cls-2 {
-        fill: #fff;
-      }
-    </style>
-    <linearGradient id="GTmetrixIcon-linear-gradient" x1="70.29" y1="70.29" x2="409.71" y2="409.71" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#2afadf"/>
-      <stop offset="1" stop-color="#4c83ff"/>
-    </linearGradient>
-  </defs>
-  <title>gtmetrix</title>
-  <circle class="gtmetrix-icon-cls-1" cx="240" cy="240" r="240"/>
-  <path class="gtmetrix-icon-cls-2" d="M274.56,186.85a7.14,7.14,0,0,0-9.14,4.3l-22.77,63.26a28.56,28.56,0,1,0,13.44,4.84L278.86,196a7.14,7.14,0,0,0-4.3-9.14ZM240,297.14a14.29,14.29,0,1,1,14.29-14.29A14.3,14.3,0,0,1,240,297.14ZM240,140A128.61,128.61,0,0,0,126.27,328.58,21.44,21.44,0,0,0,145.22,340H334.78a21.44,21.44,0,0,0,19-11.42A128.61,128.61,0,0,0,240,140ZM341.1,321.91a7.14,7.14,0,0,1-6.32,3.81H145.22a7.14,7.14,0,0,1-6.32-3.81,114.29,114.29,0,1,1,202.2,0Z"/>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 22.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="GTmetrixIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
+	 y="0px" viewBox="0 0 480 480" style="enable-background:new 0 0 480 480;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:url(#SVGID_1_);}
+	.st1{fill:#FFFFFF;}
+</style>
+<title>gtmetrix</title>
+<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="70.2944" y1="411.7056" x2="409.7056" y2="72.2944" gradientTransform="matrix(1 0 0 -1 0 482)">
+	<stop  offset="0" style="stop-color:#F761A1"/>
+	<stop  offset="1" style="stop-color:#8C1BAB"/>
+</linearGradient>
+<circle class="st0" cx="240" cy="240" r="240"/>
+<path class="st1" d="M327.3,157.5c-0.5-2.4-2.4-4.3-4.8-4.8c-12.6-2.7-22.4-2.7-32.2-2.7c-40.3,0-64.5,21.6-82.6,50h-40.7
+	c-7.1,0-13.6,4-16.8,10.4L131,248.9c-3.1,6.2,1.4,13.6,8.4,13.6h37.2c-2.3,5-4.6,10-7,14.7c-1.2,2.4-0.7,5.3,1.2,7.2l24.8,24.8
+	c1.9,1.9,4.8,2.4,7.2,1.2c4.8-2.4,9.7-4.7,14.7-7v37.1c0,7,7.3,11.5,13.6,8.4l38.6-19.3C276,326.6,280,320,280,313v-40.8
+	c28.4-18.1,50-42.3,50-82.5C330,179.9,330,170,327.3,157.5L327.3,157.5z M286.3,212.5c-10.4,0-18.8-8.4-18.8-18.7
+	s8.4-18.7,18.8-18.7s18.8,8.4,18.8,18.7S296.6,212.5,286.3,212.5z"/>
 </svg>

@@ -18,10 +18,6 @@
 
 {% do view.registerAssetBundle("lukeyouell\\gtmetrix\\assetbundles\\gtmetrix\\GTmetrixAsset") %}
 
-{% set docsUrl = "https://github.com/lukeyouell/craft3-gtmetrix/blob/master/README.md" %}
-
-{% set title = 'GTmetrix' %}
-
 {% set navItems = {
 	tests: { label: 'Tests'|t, url: url('gtmetrix') },
   settings: { label: 'Settings'|t, url: url('gtmetrix/settings') }
