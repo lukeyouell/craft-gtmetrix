@@ -40,7 +40,7 @@ class GTmetrixService extends Component
 
       \Yii::$app->db->createCommand()
         ->insert(
-          'gtmetrix_tests',
+          '{{%gtmetrix_tests}}',
           [
             'testId' => (!isset($response->test_id) or empty($response->test_id)) ? null : $response->test_id,
             'entryId' => (!isset($entry->id) or empty($entry->id)) ? null : $entry->id,
@@ -60,7 +60,7 @@ class GTmetrixService extends Component
      */
     public function getAllTestRecords() {
 
-      return \Yii::$app->db->createCommand('SELECT * FROM gtmetrix_tests ORDER BY dateCreated DESC')->queryAll();
+      return \Yii::$app->db->createCommand('SELECT * FROM {{%gtmetrix_tests}} ORDER BY dateCreated DESC')->queryAll();
 
     }
 
@@ -68,7 +68,7 @@ class GTmetrixService extends Component
      */
     public function getTestById($testId) {
 
-      return \Yii::$app->db->createCommand('SELECT * FROM gtmetrix_tests WHERE testId="'.$testId.'"')->queryOne();
+      return \Yii::$app->db->createCommand('SELECT * FROM {{%gtmetrix_tests}} WHERE testId="'.$testId.'"')->queryOne();
 
     }
 
@@ -123,7 +123,7 @@ class GTmetrixService extends Component
 
       // Update record
       return \Yii::$app->db->createCommand()
-               ->update('gtmetrix_tests',
+               ->update('{{%gtmetrix_tests}}',
                    [
                      'state' => (!isset($response->state) or empty($response->state)) ? 'error' : $response->state,
                      'response' => (!isset($response) or empty($response)) ? null : json_encode($response)
