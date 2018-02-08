@@ -2,7 +2,7 @@
     "name": "lukeyouell/craft3-gtmetrix",
     "description": "GTmetrix gives you insight on how well your entries load and provides actionable recommendations on how to optimise them.",
     "type": "craft-plugin",
-    "version": "1.1.1",
+    "version": "1.1.2",
     "keywords": [
         "craft",
         "cms",
