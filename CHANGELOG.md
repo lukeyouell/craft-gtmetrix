@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+
+## 1.1.2 - 2018-02-08
+
+### Fixed
+- Fixed an issue where the table name wasn't being prefixed [#2](https://github.com/lukeyouell/craft-gtmetrix/issues/2)
+
 ## 1.1.1 - 2018-01-19
 
 ### Changed
