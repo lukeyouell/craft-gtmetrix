@@ -1,3 +1,5 @@
+<img src="src/icon.svg" alt="icon" width="100" height="100">
+
 # GTmetrix plugin for Craft CMS 3.x
 
 GTmetrix gives you insight on how well your entries load and provides actionable recommendations on how to optimise them.
@@ -6,7 +8,7 @@ GTmetrix gives you insight on how well your entries load and provides actionable
 
 ## Requirements
 
-This plugin requires Craft CMS 3.0.0-RC1 or later.
+This plugin requires Craft CMS 3.0.0-RC11 or later.
 
 ## Installation
 
