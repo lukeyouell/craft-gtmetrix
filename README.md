@@ -8,7 +8,7 @@ GTmetrix gives you insight on how well your entries load and provides actionable
 
 ## Requirements
 
-This plugin requires Craft CMS 3.0.0-RC11 or later.
+This plugin requires Craft CMS 3.0.0 or later.
 
 ## Installation
 
