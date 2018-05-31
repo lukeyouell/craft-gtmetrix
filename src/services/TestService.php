@@ -8,32 +8,33 @@
  * @copyright Copyright (c) 2018 Luke Youell
  */
 
-namespace lukeyouell\gtmetrix\variables;
+namespace lukeyouell\gtmetrix\services;
 
 use lukeyouell\gtmetrix\GTmetrix;
 
 use Craft;
+use craft\base\Component;
 
 /**
  * @author    Luke Youell
  * @package   GTmetrix
  * @since     2.0.0
  */
-class GTmetrixVariable
+class TestService extends Component
 {
     // Public Methods
     // =========================================================================
 
-    /**
-     * @param null $optional
-     * @return string
+    /*
+     * @return mixed
      */
-    public function exampleVariable($optional = null)
+    public function exampleService()
     {
-        $result = "And away we go to the Twig template...";
-        if ($optional) {
-            $result = "I'm feeling optional today...";
+        $result = 'something';
+        // Check our Plugin's settings for `someAttribute`
+        if (GTmetrix::$plugin->getSettings()->someAttribute) {
         }
+
         return $result;
     }
 }

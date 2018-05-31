@@ -5,42 +5,33 @@
  * GTmetrix gives you insight on how well your entries load and provides actionable recommendations on how to optimise them.
  *
  * @link      https://github.com/lukeyouell
- * @copyright Copyright (c) 2017 Luke Youell
+ * @copyright Copyright (c) 2018 Luke Youell
  */
 
-namespace lukeyouell\gtmetrix\migrations;
+namespace lukeyouell\stripecheckout\migrations;
 
-use lukeyouell\gtmetrix\GTmetrix;
+use lukeyouell\stripecheckout\Support;
 
 use Craft;
 use craft\config\DbConfig;
 use craft\db\Migration;
+use craft\helpers\MigrationHelper;
 
-/**
- * @author    Luke Youell
- * @package   GTmetrix
- * @since     1.0.0
- */
 class Install extends Migration
 {
     // Public Properties
     // =========================================================================
 
-    /**
-     * @var string The database driver to use
-     */
     public $driver;
 
     // Public Methods
     // =========================================================================
 
-    /**
-     * @inheritdoc
-     */
     public function safeUp()
     {
         $this->driver = Craft::$app->getConfig()->getDb()->driver;
         if ($this->createTables()) {
+            $this->addForeignKeys();
             // Refresh the db schema caches
             Craft::$app->db->schema->refresh();
         }
@@ -48,13 +39,11 @@ class Install extends Migration
         return true;
     }
 
-   /**
-     * @inheritdoc
-     */
     public function safeDown()
     {
         $this->driver = Craft::$app->getConfig()->getDb()->driver;
-        $this->removeTables();
+        $this->dropForeignKeys();
+        $this->dropTables();
 
         return true;
     }
@@ -62,32 +51,30 @@ class Install extends Migration
     // Protected Methods
     // =========================================================================
 
-    /**
-     * @return bool
-     */
     protected function createTables()
     {
         $tablesCreated = false;
 
-        $tableSchema = Craft::$app->db->schema->getTableSchema('{{%gtmetrix_tests}}');
+        // support_tickets table
+        $tableSchema = Craft::$app->db->schema->getTableSchema('{{%support_tickets}}');
         if ($tableSchema === null) {
             $tablesCreated = true;
+
             $this->createTable(
-                '{{%gtmetrix_tests}}',
+                '{{%checkout_charges}}',
                 [
-                    'id' => $this->primaryKey(),
+                    'id'          => $this->primaryKey(),
                     'dateCreated' => $this->dateTime()->notNull(),
                     'dateUpdated' => $this->dateTime()->notNull(),
-                    'uid' => $this->uid(),
-                    'testId' => $this->string(),
-                    'entryId' => $this->integer(),
-                    'entryTitle' => $this->string(),
-                    'entryUrl' => $this->string(),
-                    'location' => $this->integer(),
-                    'browser' => $this->integer(),
-                    'connection' => $this->string(),
-                    'state' => $this->string()->notNull()->defaultValue('requested'),
-                    'response' => $this->text(),
+                    'uid'         => $this->uid(),
+                    // Custom columns in the table
+                    'testId'      => $this->string(),
+                    'state'      => $this->string(),
+                    'entryId'     => $this->integer()->notNull(),
+                    'loadTime'    => $this->integer(),
+                    'pagespeed'   => $this->integer(),
+                    'yslow'       => $this->integer(),
+                    'data'        => $this->text(),
                 ]
             );
         }
@@ -95,11 +82,18 @@ class Install extends Migration
         return $tablesCreated;
     }
 
-    /**
-     * @return void
-     */
-    protected function removeTables()
+    protected function addForeignKeys()
     {
-        $this->dropTableIfExists('{{%gtmetrix_tests}}');
+        $this->addForeignKey(null, '{{%checkout_charges}}', ['id'], '{{%elements}}', ['id'], 'CASCADE');
+    }
+
+    protected function dropForeignKeys()
+    {
+        MigrationHelper::dropAllForeignKeysOnTable('{{%checkout_charges}}', $this);
+    }
+
+    protected function dropTables()
+    {
+        $this->dropTable('{{%checkout_charges}}');
     }
 }

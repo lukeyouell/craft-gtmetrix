@@ -1,3 +1,4 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
 {#
 /**
  * GTmetrix plugin for Craft CMS 3.x
@@ -5,83 +6,35 @@
  * GTmetrix index.twig
  *
  * @author    Luke Youell
- * @copyright Copyright (c) 2017 Luke Youell
+ * @copyright Copyright (c) 2018 Luke Youell
  * @link      https://github.com/lukeyouell
  * @package   GTmetrix
- * @since     1.0.0
+ * @since     2.0.0
  */
 #}
 
-{% extends "gtmetrix/_layout" %}
+{% extends "_layouts/cp" %}
+{% import "_includes/forms" as forms %}
 
-{% set title = 'Tests' %}
-{% set selectedNavItem = 'tests' %}
-{% set tests = craft.GTmetrix.getAllTestRecords() %}
+{% do view.registerAssetBundle("lukeyouell\\gtmetrix\\assetbundles\\gtmetrix\\GTmetrixAsset") %}
+{% do view.registerAssetBundle("lukeyouell\\gtmetrix\\assetbundles\\indexcpsection\\IndexCPSectionAsset") %}
 
-{% block actionButton %}
+{% set docsUrl = "https://github.com/craft-gtmetrix/gtmetrix/blob/master/README.md" %}
 
-  <span class="btn" onClick="window.location.reload()">{{ 'Refresh'|t }}</span>
+{% set title = "GTmetrix" %}
 
-  <a href="{{ url('gtmetrix/new') }}" class="btn submit add icon">{{ 'New test'|t }}</a>
+{% set pluginCpUrl = url('gtmetrix') %}
 
-{% endblock %}
+{% set iconUrl = view.getAssetManager().getPublishedUrl('@lukeyouell/gtmetrix/assetbundles/indexcpsection/dist', true) ~ '/img/Index-icon.svg' %}
+
+{% set extraPageHeaderHtml %}
+    <div class="buttons">
+        <a href="{{ pluginCpUrl }}" class="btn submit add icon">{{ "Click Me!"|t('gtmetrix') }}</a>
+    </div>
+{% endset %}
 
 {% set content %}
-
-  {% if tests|length %}
-
-    <table class="data fullwidth collapsible">
-
-      <thead>
-
-        <th scope="col">{{ 'Title'|t }}</th>
-        <th scope="col">{{ 'Date'|t }}</th>
-        <th scope="col">{{ 'State'|t }}</th>
-        <th scope="col">{{ 'PageSpeed'|t }}</th>
-        <th scope="col">{{ 'YSlow'|t }}</th>
-        <td scope="col" data-icon="view" title="{{ 'View'|t }}"></td>
-
-      </thead>
-
-      <tbody>
-
-        {% for test in tests %}
-
-          {% set record = test.state not in ['completed', 'error'] ? craft.GTmetrix.updateTest(test.testId) %}
-          {% set report = craft.GTmetrix.decodeReport(test.response) %}
-
-          <tr>
-
-            <th><a href="{{ url('gtmetrix/report?id=' ~ test.testId) }}">{{ test.entryTitle ? test.entryTitle : 'Undefined'|t }}</a></th>
-            <td>{{ test.dateCreated|date('d/m/Y H:i') }}</td>
-            <td>
-              <span class="status {{
-                  test.state == 'queued' ? 'orange' :
-                  test.state == 'started' ? 'blue' :
-                  test.state == 'completed' ? 'green' :
-                  test.state == 'error' ? 'red' :
-                  'grey' }}">
-              </span>
-              {{ test.state ? test.state|title : 'Requested'|t }}
-            </td>
-            <td>{{ report.results.pagespeed_score is defined ? report.results.pagespeed_score ~ '%' : '...' }}</td>
-            <td>{{ report.results.yslow_score is defined ? report.results.yslow_score ~ '%' : '...' }}</td>
-            <td><a href="{{ url('gtmetrix/report?id=' ~ test.testId) }}" data-icon="view"></a></td>
-
-          </tr>
-
-        {% endfor %}
-
-      </tbody>
-
-    </table>
-
-  {% else %}
-
-    <h3>{{ 'No Tests Found'|t }}</h3>
-
-    <p>{{ 'It looks like you haven\'t tested any of your entries yet.'|t }}</p>
-
-  {% endif %}
-
+    <h2>{{ "Index CP Section body goes here"|t('gtmetrix') }}</h2>
+    <img src="{{ iconUrl }}" height="64" width="64" />
+    <p class="textline"></p>
 {% endset %}

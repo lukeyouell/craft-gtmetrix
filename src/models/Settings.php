@@ -5,7 +5,7 @@
  * GTmetrix gives you insight on how well your entries load and provides actionable recommendations on how to optimise them.
  *
  * @link      https://github.com/lukeyouell
- * @copyright Copyright (c) 2017 Luke Youell
+ * @copyright Copyright (c) 2018 Luke Youell
  */
 
 namespace lukeyouell\gtmetrix\models;
@@ -18,7 +18,7 @@ use craft\base\Model;
 /**
  * @author    Luke Youell
  * @package   GTmetrix
- * @since     1.0.0
+ * @since     2.0.0
  */
 class Settings extends Model
 {
@@ -28,12 +28,7 @@ class Settings extends Model
     /**
      * @var string
      */
-    public $userEmail = '';
-
-    /**
-     * @var string
-     */
-    public $apiKey = '';
+    public $someAttribute = 'Some Default';
 
     // Public Methods
     // =========================================================================
@@ -43,9 +38,9 @@ class Settings extends Model
      */
     public function rules()
     {
-      return [
-          [['userEmail', 'apiKey'], 'string'],
-          [['userEmail', 'apiKey'], 'required'],
-      ];
+        return [
+            ['someAttribute', 'string'],
+            ['someAttribute', 'default', 'value' => 'Some Default'],
+        ];
     }
 }

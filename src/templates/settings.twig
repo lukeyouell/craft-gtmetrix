@@ -1,134 +1,26 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
 {#
 /**
  * GTmetrix plugin for Craft CMS 3.x
  *
- * GTmetrix settings.twig
+ * GTmetrix Settings.twig
  *
  * @author    Luke Youell
- * @copyright Copyright (c) 2017 Luke Youell
+ * @copyright Copyright (c) 2018 Luke Youell
  * @link      https://github.com/lukeyouell
  * @package   GTmetrix
- * @since     1.0.0
+ * @since     2.0.0
  */
 #}
 
-{% extends "gtmetrix/_layout" %}
-
 {% import "_includes/forms" as forms %}
 
-{% set title = 'Settings' %}
-{% set plugin = craft.app.plugins.getPlugin('gtmetrix') %}
-{% set settings = plugin.settings %}
-{% set selectedNavItem = 'settings' %}
-{% set fullPageForm = true %}
+{% do view.registerAssetBundle("lukeyouell\\gtmetrix\\assetbundles\\gtmetrix\\GTmetrixAsset") %}
 
-{% set content %}
-
-  <div class="grid-x grid-margin-x">
-
-    {% if settings.apiKey|length %}
-
-      <div class="cell">
-
-        {% set accountStatus = craft.GTmetrix.getAccountStatus() %}
-
-        <h3>{{ 'Account Status'|t }}</h3>
-
-        {% if accountStatus.error is defined %}
-
-          <div class="callout alert">
-
-            <p>{{ (accountStatus.reason|t) ~ (accountStatus.body.error is defined ? ': ' ~ accountStatus.body.error|t) }}</p>
-
-          </div>
-
-        {% elseif (accountStatus.body.api_credits is defined) and (accountStatus.body.api_refill is defined) %}
-
-          <div class="grid-x grid-margin-x">
-
-            <div class="cell">
-
-              <div class="callout success">
-
-                <p>{{ 'Connected'|t }}</p>
-
-              </div>
-
-            </div>
-
-            <div class="medium-6 cell">
-
-              <div class="callout secondary">
-
-                <h4>{{ 'Credits Left'|t }}</h4>
-
-                <p>{{ accountStatus.body.api_credits }}</p>
-
-              </div>
-
-            </div>
-
-            <div class="medium-6 cell">
-
-              <div class="callout secondary">
-
-                <h4>{{ 'Next Refill'|t }}</h4>
-
-                <p>{{ craft.app.info.timezone is defined ? accountStatus.body.api_refill|date('jS F Y H:i (T)', craft.app.info.timezone) : accountStatus.body.api_refill|date('jS F Y H:i') }}</p>
-
-              </div>
-
-            </div>
-
-          </div>
-
-        {% endif %}
-
-      </div>
-
-    {% endif %}
-
-    <div class="cell">
-
-      {{ forms.hidden({
-          name: 'action',
-          value: 'plugins/save-plugin-settings'
-        })
-      }}
-
-      {{ forms.hidden({
-          name: 'pluginHandle',
-          value: 'gtmetrix'
-        })
-      }}
-
-      {{ redirectInput('gtmetrix/settings') }}
-
-      {{ forms.textField({
-          first: true,
-          label: 'Email Address'|t,
-          instructions: 'The email address associated with your GTmetrix account.'|t,
-          id: 'settings-userEmail',
-          name: 'settings[userEmail]',
-          placeholder: 'Email address',
-          value: settings.userEmail,
-          required: true
-        })
-      }}
-
-      {{ forms.textField({
-          label: 'API Key'|t,
-          instructions: 'The API key used to authenticate requests made to GTmetrix.'|t,
-          id: 'settings-apiKey',
-          name: 'settings[apiKey]',
-          placeholder: 'c5CBbj7AtFQwdIuBb5Aqsm3yMqcS7fyH',
-          value: settings.apiKey,
-          required: true,
-        })
-      }}
-
-    </div>
-
-  </div>
-
-{% endset %}
+{{ forms.textField({
+    label: 'Some Field',
+    instructions: 'Enter some setting here.',
+    id: 'someAttribute',
+    name: 'someAttribute',
+    value: settings['someAttribute']})
+}}
